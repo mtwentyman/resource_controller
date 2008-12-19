@@ -19,6 +19,9 @@ class Helpers::NestedTest < Test::Unit::TestCase
 
     @params = stub :[] => "1"
     @controller.stubs(:params).returns(@params)
+    
+    @request = stub :path => ""
+    @controller.stubs(:request).returns(@request)        
 
     @object = Post.new
     Post.stubs(:find).with("1").returns(@object)
@@ -157,11 +160,14 @@ class Helpers::NestedTest < Test::Unit::TestCase
   
   context "end of association chain when there are parents" do
     setup do
-      @photo_mock     = mock
-      @photo_mock.expects(:somethings).returns ''
-      @controller.stubs(:parent?).returns true
-      @controller.stubs(:model_name).returns :something
-      @controller.stubs(:parent_objects).returns [[:photo, @photo_mock]]
+      @comments_controller = CommentsControllerMock.new
+      @comment_params = stub()
+      @comment_params.stubs(:[]).with(:post_id).returns 2
+      @request = stub :path => ""
+      @comments_controller.stubs(:request).returns(@request)          
+      @comments_controller.stubs(:params).returns(@comment_params)
+      @post = Post.new
+      Post.stubs(:find).with(2).returns @post
     end
 
     should "acquire the association proxy for the current model from the last parent object" do

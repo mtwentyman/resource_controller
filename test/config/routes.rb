@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users do |user|
     user.resources :photos, :name_prefix => "user_"
+    user.resource :image
   end
 
   map.resources :somethings
@@ -21,6 +22,9 @@ ActionController::Routing::Routes.draw do |map|
   
   map.namespace :cms do |cms|
     cms.resources :products, :has_many => :options
+    cms.resources :personnel do |personnel|
+      personnel.resources :photos
+    end
   end
 
   map.resources :posts do |post|
@@ -30,7 +34,13 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.resources :comments
-
+  
+  map.resource :account, :has_many => :options
+  
+  map.resource :image
+  
+  map.resources :options
+  
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:
