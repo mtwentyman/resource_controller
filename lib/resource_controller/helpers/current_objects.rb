@@ -7,7 +7,6 @@ module ResourceController
         def model
           model_name.to_s.camelize.constantize
         end
-
   
         # Used to fetch the collection for the index method
         #
@@ -49,6 +48,10 @@ module ResourceController
           instance_variable_set "@#{parent_type}", parent_object if parent?
           instance_variable_set "@#{object_name}", object
         end
+        # def load_object
+        #   load_parents
+        #   instance_variable_set "@#{object_name}", object
+        # end
     
         # Used internally to load the collection in to an instance variable @#{model_name.pluralize} (i.e. @posts)
         #
@@ -56,14 +59,16 @@ module ResourceController
           instance_variable_set "@#{parent_type}", parent_object if parent?
           instance_variable_set "@#{object_name.to_s.pluralize}", collection
         end
+        # def load_collection
+        #   load_parents
+        #   instance_variable_set "@#{object_name.to_s.pluralize}", collection
+        # end
         
-        # Used internally to load the parents of the main object into an instance variable @#{model_name.pluralize} (i.e. @posts)
-        #
-        def load_parents
-          if parent?
-            parent_objects.each { |parent_type, parent_object| instance_variable_set "@#{parent_type}", parent_object }
-          end
-        end
+        # def load_parents
+        #   if parent?
+        #     parent_objects.each { |parent_type, parent_object| instance_variable_set "@#{parent_type}", parent_object }
+        #   end
+        # end
   
         # Returns the form params.  Defaults to params[model_name] (i.e. params["post"])
         #
